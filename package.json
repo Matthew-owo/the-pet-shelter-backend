@@ -1,0 +1,35 @@
+{
+  "name": "the-pet-shelter-backend",
+  "version": "1.0.0",
+  "description": "SHAPE VT6003CEM Web API Development 2022-2023 Assignment",
+  "main": "server.js",
+  "repository": "https://github.com/Matthew-owo/the-pet-shelter-backend.git",
+  "author": "Tsoi Man Wai",
+  "license": "MIT",
+  "scripts": {
+    "dev:build": "tsc -w",
+    "dev:run": "nodemon ./dist/server.js",
+    "dev": "conc yarn:dev:*"
+  },
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@types/koa": "^2.13.6",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-json": "^2.0.20",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-router": "^7.4.4",
+    "@types/koa__cors": "^4.0.0",
+    "dayjs": "^1.11.8",
+    "dotenv": "^16.1.3",
+    "firebase-admin": "^11.9.0",
+    "koa": "^2.14.2",
+    "koa-bodyparser": "^4.4.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^12.0.0",
+    "typescript": "^5.1.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.1.0"
+  }
+}
