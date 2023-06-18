@@ -1,3 +1,4 @@
+import multer from "@koa/multer";
 import { getAllCats as fetchCats, createCat as addCat } from "../models/cat";
 import Cat from "../types/Cat";
 
@@ -16,6 +17,6 @@ export const getAllCats = async (): Promise<Cat[]> => {
  * @param newCat - The cat to be created.
  * @returns Promise<Cat> - The created cat.
  */
-export const createCat = async (newCat: Cat): Promise<Cat> => {
-  return addCat(newCat);
+export const createCat = async (newCat: Cat, newCatImage: multer.File): Promise<Cat> => {
+  return addCat(newCat, newCatImage);
 };

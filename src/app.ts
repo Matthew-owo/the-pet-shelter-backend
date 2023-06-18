@@ -1,5 +1,5 @@
 // Import packages
-import Koa from "koa";
+import Koa, { Context, DefaultState } from "koa";
 import Router from "koa-router";
 import logger from "koa-logger";
 import json from "koa-json";
@@ -8,7 +8,7 @@ import { setupCatRoutes } from "./routes/cat";
 import { setupUserRoutes } from "./routes/user";
 
 const app: Koa = new Koa();
-const router = new Router();
+const router = new Router<DefaultState, Context>();
 
 app.use(cors({ origin: "*" }));
 

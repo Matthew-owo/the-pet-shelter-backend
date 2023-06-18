@@ -5,7 +5,6 @@ export const isAuthorized = (opts: {
   allowSameUser?: boolean;
 }) => {
   return async (ctx: Context, next: Function) => {
-    console.log(ctx.state);
     const { uid, email, role } = ctx.state.currentUser;
     const { id } = ctx.params;
 

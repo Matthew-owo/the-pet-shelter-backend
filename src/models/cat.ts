@@ -1,5 +1,9 @@
-import { db } from "../utils/Firebase";
+import { db, storage } from "../utils/Firebase";
 import Cat from "../types/Cat";
+import multer from "@koa/multer";
+import path from "path";
+import fs from "fs";
+import dayjs from "dayjs";
 
 /**
  * Retrieve all cats from the database.
@@ -17,7 +21,11 @@ export const getAllCats = async (): Promise<Cat[]> => {
   snapshot.forEach((doc) => {
     // Extract the cat data from the document
     const catData = doc.data() as Cat;
-    cats.push(catData);
+    cats.push({
+      ...catData,
+      id: doc.id,
+      createTime: doc.createTime.toDate().toString(),
+    });
   });
 
   return cats;
@@ -29,11 +37,14 @@ export const getAllCats = async (): Promise<Cat[]> => {
  * @param catData - The cat data to be created.
  * @returns Promise<Cat> - The created cat.
  */
-export const createCat = async (newCat: Cat): Promise<Cat> => {
+export const createCat = async (
+  newCat: Cat,
+  newCatImage: multer.File
+): Promise<Cat> => {
   const { name, age, breed } = newCat;
 
   // Check if any required fields are missing
-  if (!name || !age || !breed) {
+  if (!name || !age || !breed || !newCatImage) {
     throw new Error("Missing fields");
   }
 
@@ -41,7 +52,28 @@ export const createCat = async (newCat: Cat): Promise<Cat> => {
 
   // Add the new cat to the collection
   const docRef = await collectionRef.add(newCat);
-  const createdCat: Cat = { id: docRef.id, ...newCat };
+
+  const fileExtName = path.extname(newCatImage.originalname);
+  const fileName = `${docRef.id}${fileExtName}`;
+
+  const bucket = storage.bucket("the-pet-shelter-89369.appspot.com");
+
+  const imageResponse = await bucket.upload(newCatImage.path, {
+    destination: fileName,
+  });
+
+  const imageUrl = `https://firebasestorage.googleapis.com/v0/b/the-pet-shelter-89369.appspot.com/o/${imageResponse[0].name}?alt=media`;
+
+  await docRef.update({ image: imageUrl });
+
+  const createdCat: Cat = { id: docRef.id, ...newCat, imageUrl: imageUrl };
+
+  fs.unlink(newCatImage.path, (error) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+  });
 
   return createdCat;
 };
