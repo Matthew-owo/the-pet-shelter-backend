@@ -27,3 +27,6 @@ yarn-error.log*
 
 # typescript specific files
 *.tsbuildinfo
+
+# Temp folder
+/temp

@@ -1,0 +1,137 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Pet Shelter API
+paths:
+  /cats:
+    get:
+      summary: Get all cats
+      responses:
+        200:
+          description: OK
+    post:
+      summary: Create a new cat
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Cat"
+      responses:
+        201:
+          description: Created
+  /cats/{id}:
+    get:
+      summary: Get a cat by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: Cat not found
+    put:
+      summary: Update a cat by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Cat"
+      responses:
+        200:
+          description: OK
+    delete:
+      summary: Remove a cat by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /cats/{name}:
+    get:
+      summary: Get cats by name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /users:
+    post:
+      summary: Create a new user
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/RegistrationDetails"
+      responses:
+        201:
+          description: Created
+  /users/{userId}/favorites:
+    get:
+      summary: Get all favorites for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+    post:
+      summary: Add a cat to favorites
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/UserFavorite"
+      responses:
+        201:
+          description: Created
+definitions:
+  Cat:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      age:
+        type: integer
+      breed:
+        type: string
+      imageUrl:
+        type: string
+  RegistrationDetails:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  UserFavorite:
+    type: object
+    properties:
+      userId:
+        type: string
+      catId:
+        type: string

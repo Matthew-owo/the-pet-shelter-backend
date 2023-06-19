@@ -1,7 +1,8 @@
 import User from "../types/User";
 import RegistrationDetails from "../types/RegistrationDetails";
-import { auth } from "../utils/Firebase";
+import { auth, db } from "../utils/Firebase";
 import "dotenv/config";
+import UserFavorite from "../types/UserFavorite";
 
 /**
  * Create a user with email and password, if provided valid signUpCode that will be a employee role.
@@ -49,4 +50,30 @@ export const createUser = async (
   };
 
   return newUser;
+};
+
+export const addFavorite = async (userId: string, catId: string) => {
+  const collectionRef = db.collection("favorite");
+  await collectionRef.add({ userId, catId });
+  return { userId, catId };
+};
+
+export const getAllFavorite = async (
+  userId: string
+): Promise<UserFavorite[]> => {
+  const collectionRef = db.collection("favorite");
+
+  const snapshot = await collectionRef.get();
+  const fav: UserFavorite[] = [];
+
+  snapshot.forEach((doc) => {
+    const favData = doc.data() as UserFavorite;
+    if (favData.userId === userId) {
+      fav.push({
+        ...favData,
+      });
+    }
+  });
+
+  return fav;
 };
